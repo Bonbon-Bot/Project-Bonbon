@@ -1,4 +1,49 @@
-# Project-Bonbon## RESULT OBJECT
+# npm-package-arg
+
+Parses package name and specifier passed to commands like `npm install` or
+`npm cache add`, or as found in `package.json` dependency sections.
+
+## EXAMPLES
+
+```javascript
+var assert = require("assert")
+var npa = require("npm-package-arg")
+
+// Pass in the descriptor, and it'll return an object
+try {
+  var parsed = npa("@bar/foo@1.2")
+} catch (ex) {
+  …
+}
+```
+
+## USING
+
+`var npa = require('npm-package-arg')`
+
+### var result = npa(*arg*[, *where*])
+
+* *arg* - a string that you might pass to `npm install`, like:
+`foo@1.2`, `@bar/foo@1.2`, `foo@user/foo`, `http://x.com/foo.tgz`,
+`git+https://github.com/user/foo`, `bitbucket:user/foo`, `foo.tar.gz`,
+`../foo/bar/` or `bar`.  If the *arg* you provide doesn't have a specifier
+part, eg `foo` then the specifier will default to `latest`.
+* *where* - Optionally the path to resolve file paths relative to. Defaults to `process.cwd()`
+
+**Throws** if the package name is invalid, a dist-tag is invalid or a URL's protocol is not supported.
+
+### var result = npa.resolve(*name*, *spec*[, *where*])
+
+* *name* - The name of the module you want to install. For example: `foo` or `@bar/foo`.
+* *spec* - The specifier indicating where and how you can get this module. Something like:
+`1.2`, `^1.7.17`, `http://x.com/foo.tgz`, `git+https://github.com/user/foo`,
+`bitbucket:user/foo`, `file:foo.tar.gz` or `file:../foo/bar/`.  If not
+included then the default is `latest`.
+* *where* - Optionally the path to resolve file paths relative to. Defaults to `process.cwd()`
+
+**Throws** if the package name is invalid, a dist-tag is invalid or a URL's protocol is not supported.
+
+## RESULT OBJECT
 
 The objects that are returned by npm-package-arg contain the following
 keys:
@@ -34,5 +79,3 @@ keys:
   JSON.
 * `raw` - The original un-modified string that was provided.  If called as
   `npa.resolve(name, spec)` then this will be `name + '@' + spec`.
-
-Working on bonbon-bot
